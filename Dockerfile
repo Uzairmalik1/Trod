@@ -49,18 +49,9 @@ RUN mkdir -p public/uploads && \
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
-echo "Waiting for PostgreSQL to start..."\n\
-while ! pg_isready -h db -U postgres -q; do\n\
-  echo "Waiting for database connection..."\n\
-  sleep 2\n\
-done\n\
-echo "Database is up!"\n\
-\n\
-# Run migrations\n\
 echo "Running migrations..."\n\
 npx prisma migrate deploy\n\
 \n\
-# Start the application\n\
 echo "Starting application..."\n\
 npm run start\n\
 ' > /app/start.sh
