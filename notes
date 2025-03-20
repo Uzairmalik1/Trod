@@ -1,0 +1,105 @@
+1. Basic Docker Container Management
+# Stop and remove all containers
+docker-compose down
+
+# Start containers in detached mode
+docker-compose up -d
+
+# View container logs
+docker-compose logs app    # View app container logs
+docker-compose logs db     # View database container logs
+docker-compose logs -f     # Follow all logs in real-time
+
+# Restart specific container
+docker-compose restart app
+docker-compose restart db
+
+2. Database Management
+# Access PostgreSQL database
+docker exec -it send_short-db-1 psql -U postgres -d trod_ai
+
+# Run Prisma commands
+docker exec send_short-app-1 npx prisma generate        # Generate Prisma client
+docker exec send_short-app-1 npx prisma db push         # Push schema changes
+docker exec send_short-app-1 npx prisma migrate deploy  # Run migrations
+docker exec send_short-app-1 npx prisma db seed         # Seed the database
+
+# Start Prisma Studio (Database GUI)
+docker exec send_short-app-1 npx prisma studio --hostname 0.0.0.0
+# Access at http://localhost:5557
+
+3. Clean Up Commands
+# Remove all containers and networks
+docker-compose down
+
+# Remove all containers, networks, and volumes (CAREFUL: Deletes database data)
+docker-compose down -v
+
+# Remove specific volumes
+docker volume rm send_short_postgres_data
+
+# Remove all unused volumes
+docker volume prune
+
+4. Rebuild Application
+# Rebuild the application image
+docker build -t send_short .
+
+# Rebuild and start (if you made changes to Dockerfile)
+docker-compose up -d --build
+
+5. Troubleshooting Commands
+# Check container status
+docker ps
+docker-compose ps
+
+# Check container health
+docker inspect send_short-app-1
+docker inspect send_short-db-1
+
+# View container resource usage
+docker stats
+
+# Enter container shell
+docker exec -it send_short-app-1 /bin/bash
+docker exec -it send_short-db-1 /bin/bash
+
+
+6. Common Workflow Commands
+# Complete restart workflow
+docker-compose down              # Stop everything
+docker volume prune -f          # Remove old volumes (optional)
+docker-compose up -d            # Start fresh
+docker exec send_short-app-1 npx prisma migrate deploy  # Run migrations
+docker exec send_short-app-1 npx prisma db seed         # Seed database
+docker exec send_short-app-1 npx prisma studio --hostname 0.0.0.0  # Start Prisma Studio
+
+
+7. Environment Variables
+# Check environment variables in container
+docker exec send_short-app-1 printenv
+
+# Run with specific env file
+docker-compose --env-file .env.local up -d
+
+
+
+
+Important Notes:
+The database runs on port 5433 (host) -> 5432 (container)
+The app runs on port 3000
+Prisma Studio runs on port 5557
+Database credentials:
+Username: postgres
+Password: admin
+Database: trod_ai
+File Locations in Container:
+App directory: /app
+Uploads directory: /app/public/uploads
+Prisma schema: /app/prisma/schema.prisma
+Save these commands for future reference. When you need to:
+Start fresh: Use the "Complete restart workflow"
+Check data: Use Prisma Studio
+Debug issues: Use the troubleshooting commands
+Make changes: Use the rebuild commands
+Let me know if you need any clarification on any of these commands!

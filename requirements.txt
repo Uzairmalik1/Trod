@@ -1,0 +1,11 @@
+clipsai==0.2.1
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2
+numpy==1.26.4
+opencv-python==4.11.0.86
+ffmpeg-python>=0.2.0
+python-magic==0.4.27
+whisperx==3.3.1
+scenedetect==0.6.6 

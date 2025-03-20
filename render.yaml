@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: trod-ai
+    env: docker
+    plan: standard
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    disk:
+      name: uploads
+      mountPath: /app/public/uploads
+      sizeGB: 10
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: trod-ai-db
+          property: connectionString
+
+databases:
+  - name: trod-ai-db
+    plan: standard 
