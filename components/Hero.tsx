@@ -131,10 +131,10 @@ const Hero = () => {
             </motion.div>
             {/* ✅ Centered Video with Rounded Borders and Autoplay */}
             <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 1 }}
-                className="mt-12 flex justify-center"
+                // initial={{ opacity: 0, scale: 0 }}
+                // whileInView={{ opacity: 1, scale: 1 }}
+                // transition={{ duration: 1, delay: 1 }}
+                // className="mt-12 flex justify-center"
             >
                 <video
                     src="/video.mp4"

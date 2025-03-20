@@ -34,15 +34,15 @@ export function CompanyLogo({
 }) {
 
   return (
-     <Link href={teams.link} className="flex items-center gap-3 p-3">
+     <Link href={teams.link} className="flex items-center gap-3 p-3 pl-0">
           <Collapsible
             asChild
             className="group/collapsible"
           >
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton>
-                  <Image src={teams.logo} alt="logo" width={30} height={30}/>
-                  <span>{teams.name}</span>
+                  <Image src={teams.logo} alt="logo" width={130} height={60}/>
+                  {/* <span>{teams.name}</span> */}
                 </SidebarMenuButton>
               </CollapsibleTrigger>
           </Collapsible>

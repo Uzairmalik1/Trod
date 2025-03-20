@@ -71,8 +71,8 @@ const Navbar = () => {
       <div className="flex items-center justify-between w-[22rem] sm:w-[30rem] md:w-[56rem] max-w-[56rem] px-1 py-1 rounded-full bg-[#14061f] shadow-lg">
         {/* Logo */}
         <Link href={"/"} className="flex items-center gap-2 pl-4">
-          <Image src={"/logo.png"} alt="logo" className="text-white" width={40} height={40} />
-          <h1 className="text-white text-lg font-semibold">Editur</h1>
+          <Image src={"/trod_white.png"} alt="logo" className="text-white" width={100} height={60} />
+          {/* <h1 className="text-white text-lg font-semibold">Editur</h1> */}
         </Link>
 
         {/* Nav Links */}

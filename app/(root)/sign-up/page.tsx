@@ -23,7 +23,7 @@ const SignupForm = () => {
                 className=" p-8 rounded-xl shadow-2xl border border-gray-300/50 w-full max-w-md"
             >
                 {/* Header */}
-                <h1 className="text-2xl font-bold text-center">Sign up to Editur</h1>
+                <h1 className="text-2xl font-bold text-center">Sign up to Trod.ai</h1>
                 <p className="text-gray-400 text-center mt-2">
                     Create shareable clips in minutes. Free forever. No credit card required.
                 </p>

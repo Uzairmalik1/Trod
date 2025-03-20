@@ -47,8 +47,8 @@ const data = {
     avatar: session?.user?.image || "/default-avatar.png",
   },
   logo: {
-    logo: "/logo.png",
-    name: "Editur",
+    logo: "/trod.png",
+    name: "Trod.ai",
     link: "/home"
   },
   navMain: [
