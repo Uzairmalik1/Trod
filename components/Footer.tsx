@@ -17,9 +17,9 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Left Section */}
         <div>
-          <Link href="/" className="flex items-center gap-2 mb-4 ">
-            <Image src="/logo.png" alt="Logo" width={30} height={30} />
-            <span className="text-base font-semibold tracking-widest hover:text-gray-300">Editur</span>
+          <Link href="/" className="flex items-center mb-4 ">
+            <Image src="/trod_white.png" alt="Logo" width={120} height={60} />
+            {/* <span className="text-base font-semibold tracking-widest hover:text-gray-300">Editur</span> */}
           </Link>
           <p className="text-gray-300 max-w-sm">
             AI Shorts creator: automatically and instantly create viral shorts, with the power of AI. 0 skills required!

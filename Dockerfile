@@ -37,8 +37,8 @@ COPY . .
 # Disable telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Generate Prisma client
-RUN npx prisma generate
+# Generate Prisma client with schema-only, which doesn't require DATABASE_URL
+RUN npx prisma generate --schema-only
 
 # Build the Next.js application
 RUN npm run build
@@ -49,6 +49,10 @@ RUN mkdir -p public/uploads && \
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
+# Generate Prisma client with active connection\n\
+echo "Generating Prisma client..."\n\
+npx prisma generate\n\
+\n\
 echo "Running migrations..."\n\
 npx prisma migrate deploy\n\
 \n\

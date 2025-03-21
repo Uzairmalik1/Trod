@@ -94,10 +94,10 @@ const Hero = () => {
                 <Link href={"/sign-up"} className="flex items-center gap-2 bg-yellow px-6 py-3 rounded-2xl text-black font-medium shadow-lg hover:bg-yellow-500">
                     <div className="flex items-center gap-2">
                         <div className="p-2 bg-white rounded-full">
-                            <Image src="/logo.png" width={24} height={24} alt="Trod.ai" />
+                            <Image src="/icon.png" width={24} height={24} alt="Trod.ai" />
                         </div>
                         <div className="flex flex-col justify-start items-start">
-                            <span className="font-semibold">Editur AI</span>
+                            <span className="font-semibold">Trod.ai</span>
                             <span className="font-light text-sm">Online, 24/7</span>
                         </div>
 
