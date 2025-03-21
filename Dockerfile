@@ -37,8 +37,8 @@ COPY . .
 # Disable telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Generate Prisma client with schema-only, which doesn't require DATABASE_URL
-RUN npx prisma generate --schema-only
+# Generate Prisma client
+RUN npx prisma generate
 
 # Build the Next.js application
 RUN npm run build

@@ -4,7 +4,6 @@ import { signIn, signOut } from "@/auth"
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { AuthError } from "next-auth";
-import { redirect } from "next/navigation";
 
 const prisma = new PrismaClient();
 
@@ -13,7 +12,16 @@ export const login = async () => {
 }
 
 export const loginOut = async () => {
-    await signOut({redirectTo: "/login"})
+    try {
+        // More forceful logout that cleans up all session data
+        await signOut({
+            redirectTo: "/login"
+        });
+        return { success: true };
+    } catch (error) {
+        console.error("Logout error:", error);
+        return { success: false, error: "Failed to log out" };
+    }
 }
 
 export const loginWithCredentials = async (email: string, password: string) => {
@@ -40,18 +48,31 @@ export const loginWithCredentials = async (email: string, password: string) => {
             };
         }
         
-        // If credentials are valid, use NextAuth's signIn function with redirect
-        await signIn("credentials", {
-            email: email,
-            password: password,
-            redirectTo: "/home"
-        });
-        
-        // This line will only execute if redirect fails
-        redirect("/home");
-        
-        // Code below this won't execute due to redirect, but including for type safety
-        return { success: true };
+        // If credentials are valid, use NextAuth's signIn function with client-side redirect disabled
+        // This allows us to handle redirection more reliably on the client
+        try {
+            const result = await signIn("credentials", {
+                email: email,
+                password: password,
+                redirect: false
+            });
+            
+            // Check if sign in was successful
+            if (result?.error) {
+                return { 
+                    success: false, 
+                    error: result.error 
+                };
+            }
+            
+            return { success: true };
+        } catch (signInError) {
+            console.error("Sign-in error:", signInError);
+            return { 
+                success: false, 
+                error: "Authentication failed" 
+            };
+        }
     } catch (error) {
         console.error("Login error:", error);
         if (error instanceof AuthError) {
@@ -95,17 +116,21 @@ export const registerUser = async (name: string, email: string, password: string
             }
         });
         
-        // Automatically sign in after registration with redirect
-        await signIn("credentials", {
-            email: email,
-            password: password,
-            redirectTo: "/home"
-        });
-        
-        // This line will only execute if redirect fails
-        redirect("/home");
+        // Automatically sign in after registration
+        try {
+            const signInResult = await signIn("credentials", {
+                email: email,
+                password: password,
+                redirect: false
+            });
+            
+            if (signInResult?.error) {
+                console.error("Auto signin after registration failed:", signInResult.error);
+            }
+        } catch (signInError) {
+            console.error("Error signing in after registration:", signInError);
+        }
 
-        // Code below this won't execute due to redirect, but including for type safety
         return { success: true, userId: newUser.id };
     } catch (error) {
         console.error("Registration error:", error);

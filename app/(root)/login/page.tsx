@@ -10,15 +10,17 @@ import { useSession } from "next-auth/react";
 
 const LoginForm = () => {
     const router = useRouter();
-    const { data: session, status } = useSession();
+    const { data: session, status, update: updateSession } = useSession();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     // Redirect if already authenticated
     useEffect(() => {
         if (status === "authenticated" && session) {
+            setIsRedirecting(true);
             router.push("/home");
         }
     }, [session, status, router]);
@@ -35,14 +37,19 @@ const LoginForm = () => {
         }
 
         try {
-            // The loginWithCredentials function will handle the redirect
             const result = await loginWithCredentials(email, password);
             
-            // This will only execute if there's an error and no redirect
             if (!result.success) {
                 setError(result.error || "Login failed. Please try again.");
                 setIsLoading(false);
+                return;
             }
+            
+            // Force session update and redirect
+            await updateSession();
+            setIsRedirecting(true);
+            router.push("/home");
+            
         } catch (err) {
             setError("An unexpected error occurred. Please try again.");
             console.error("Login error:", err);
@@ -50,8 +57,8 @@ const LoginForm = () => {
         }
     };
 
-    // If already authenticated, show loading
-    if (status === "loading" || status === "authenticated") {
+    // If already authenticated or redirecting, show loading
+    if (status === "loading" || isRedirecting) {
         return (
             <div className="flex justify-center items-center min-h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>

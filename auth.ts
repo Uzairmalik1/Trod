@@ -65,16 +65,46 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         signOut: '/login',
         error: '/login'
     },
+    session: {
+        strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        updateAge: 24 * 60 * 60, // 24 hours
+    },
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, account, trigger }) {
+            // Initial sign in
             if (user) {
                 token.id = user.id;
+                token.email = user.email;
+                token.name = user.name;
             }
+            
+            // Handle session update
+            if (trigger === "update") {
+                // Here you could refresh user data from database if needed
+                try {
+                    const refreshedUser = await prisma.user.findUnique({
+                        where: { id: token.id as string }
+                    });
+                    
+                    if (refreshedUser) {
+                        token.name = refreshedUser.name;
+                        token.email = refreshedUser.email;
+                    }
+                } catch (error) {
+                    console.error("Error refreshing user data:", error);
+                } finally {
+                    await prisma.$disconnect();
+                }
+            }
+            
             return token;
         },
         async session({ session, token }) {
-            if (session.user && token.id) {
+            if (session.user && token) {
                 session.user.id = token.id as string;
+                session.user.email = token.email as string;
+                session.user.name = token.name as string;
             }
             return session;
         }

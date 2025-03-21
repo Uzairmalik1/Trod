@@ -30,6 +30,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { loginOut } from "@/lib/auth"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export function NavUser({
   user,
@@ -41,9 +43,26 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const router = useRouter()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   // ✅ Get the first letter of the user's name (or "U" if name is missing)
   const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "U"
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    
+    if (isLoggingOut) return
+    
+    try {
+      setIsLoggingOut(true)
+      await loginOut()
+      // Force a page reload after logout to clear all state
+      window.location.href = "/login"
+    } catch (error) {
+      console.error("Logout failed:", error)
+    }
+  }
 
   return (
     <SidebarMenu>
@@ -107,8 +126,12 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <button onClick={() => loginOut()} className="flex gap-2 items-center">
-                <LogOut /> Log out
+              <button 
+                onClick={handleLogout} 
+                className="flex gap-2 items-center"
+                disabled={isLoggingOut}
+              >
+                <LogOut /> {isLoggingOut ? "Logging out..." : "Log out"}
               </button>
             </DropdownMenuItem>
           </DropdownMenuContent>
